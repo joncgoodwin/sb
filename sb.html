@@ -89,7 +89,7 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  d3.csv("no0.csv", function(error, data) {
+  d3.csv("data.csv", function(error, data) {
       data.forEach(function(d) {
         d.elapsed = +d.elapsed;
         d.cite = +d.cite;
@@ -148,7 +148,7 @@ var kind = d3.nest()
  
 
   x.domain([0,45]);
-  y.domain([1,1024]);
+  y.domain([.1,1024]);
   svg.append("g")
       .attr("class", "axis axis--x")
       .attr("transform", "translate(0," + height + ")")
