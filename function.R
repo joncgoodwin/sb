@@ -1,0 +1,69 @@
+
+write_sleeping_beauty <- function(x,y,graph=FALSE) { #x=filename,
+                                        #y=citation threshold
+                                        #libraries
+    library(dplyr)
+    library(tidyr)
+    library(ggplot2)
+    library(scales) #for log axis in plotgraph
+
+                                        #read csv
+    sb <- read.csv(x,stringsAsFactors=FALSE)
+
+
+                                        #transform from wide to long
+    sb <- sb  %>%
+        select(name=Title,Authors,Publication.Year,X1973:X2016) %>%
+            gather(name,cite,X1973:X2016) %>%
+                mutate(Year = as.numeric(gsub("X","", Year))) %>%
+                    group_by(name) %>%
+                        mutate (cite = cumsum(cite))
+
+                                        #create elapsed column
+    sb <- sb %>% mutate(elapsed=Year-Publication.Year) %>% filter (elapsed>0)
+
+    if(graph) {
+                                        #position labels
+        sb <- sb %>% mutate (label_x_position=max(elapsed))
+        sb <- sb %>% mutate(label_position=max(cite))
+                                        #need to come up with non-manual method for this higlighting
+        rt <- sb %>% filter(grepl("STOKER|SENSATION|16TH-CENTURY SPAIN",Title))
+
+                                        #graph
+        gg <- plotgraph("Sleeping Beauties in Literary Studies") #maybe
+                                        #configure for title
+
+
+
+        gg
+    }
+
+                                        #write csv for d3.js display
+    sb <- sb %>% filter(cite>=y) # keep only those with cites greater than
+                                        # threshold
+
+                                        #need to create clean key column before writing or munge titles so
+                                        #they will be clean as key values in javascript: remove all
+                                        #quotes, commas, parentheses, etc.
+
+    write.csv(sb, "data.csv", row.names=FALSE) #this data will not be
+                                        #clean enough for d3
+
+
+
+    plotgraph <- function(x) {
+        gg <- ggplot(data=sb, aes(x=elapsed,y=cite, Group=name))
+        gg <- gg + theme_bw()
+        gg <- gg + geom_line(colour="gray", alpha=.25)
+        gg <- gg + geom_line(data=rt, aes(x=elapsed, y=cite, Group=name), alpha=1, colour="red")
+        gg <- gg + scale_y_continuous(trans=log2_trans())
+        gg <-  gg + xlab("Years Elapsed Since Publication")
+        gg <-  gg + ylab("Cumulative Citations")
+        gg <-  gg + ggtitle(x)
+                                        #gg <- gg + scale_y_continuous(breaks=c(0,1,2,3,4,5,10,25,50,100,200,400))
+        gg <- gg + geom_text(data=subset(sb, cite <1 & elapsed > 10), aes(x=label_x_position, y=label_position, Group=name, label=name), colour="red", size=2)
+
+        gg
+    }
+
+}

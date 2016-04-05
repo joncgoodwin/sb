@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+  body {
+  width: 1080px;
+  margin: auto;
+  position: relative;
+  }
+
+  svg {font: 11px "Helevetica Neue", Helvetica, Arial, sans-serif;}
+
+  .axis path
+  .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: CrispEdges;
+
+  }
+path.line {
+				fill: none;
+			}
+  .cites {
+  fill: none;
+  stroke: #aaa;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  stroke-width: .5px;
+  }
+
+  .cite--hover{
+  stroke: #F00;
+  stroke-width: 1px;
+  }
+  
+.focus text {
+  text-anchor: middle;
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+}
+
+.voronoi path {
+  fill: none;
+  pointer-events: all;
+}
+
+.voronoi--show path {
+  stroke: red;
+  stroke-opacity: .2;
+}
+
+#form {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+}
+
+</style>
+
+<label id="form" for="show-voronoi">
+  Show Voronoi
+  <input type="checkbox" id="show-voronoi" disabled>
+</label>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+
+<script>
+  var margin = {top: 20, right: 30, bottom: 30, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+  var x=d3.scale.linear()
+  .range([0,width]);
+
+  var y=d3.scale.log()
+  .base(10)
+  .range([height,0]);
+
+  var voronoi = d3.geom.voronoi()
+    .x(function(d) { return x(d.elapsed); })
+    .y(function(d) { return y(d.cite); })
+    .clipExtent([[-margin.left, -margin.top], [width + margin.right, height + margin.bottom]]);
+
+  var line = d3.svg.line()
+    .x(function(d) { return x(d.elapsed); })
+  .y(function(d) { return y(d.cite); });
+
+  
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  d3.csv("no0.csv", function(error, data) {
+      data.forEach(function(d) {
+        d.elapsed = +d.elapsed;
+        d.cite = +d.cite;
+  });
+
+var kind = d3.nest()
+        .key(function(d) {
+  return d.name;
+  
+        })
+  .entries(data);
+
+
+  var dataset=[];
+ 
+ 
+ 
+  data.forEach(function(d,i) {
+ 
+ 
+  var myCites=[];
+  
+
+
+
+
+  myCites.push({
+  named: d.name,
+  cited: d.cite,
+  elapsed: d.elapsed
+  
+  });
+  //}
+  // });
+
+  dataset.push( {
+  named: d.name,
+  cited: myCites
+  });
+  //});
+  });
+  
+      var vor = d3.nest()
+        .key(function(d) {
+          return x(d.elapsed) + "," + y(d.cite);
+        })
+        .rollup(function(v) {
+          return v[0];
+        })
+        .entries(d3.merge(kind.map(function(d) {
+          return d.values;
+        })))
+        .map(function(d) {
+          return d.values;
+  });
+ 
+
+  x.domain([0,45]);
+  y.domain([1,1024]);
+  svg.append("g")
+      .attr("class", "axis axis--x")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.svg.axis()
+        .scale(x)
+  .orient("bottom"))
+  .append("text")
+  .attr("x", 600)
+  .attr("dy", "2.5em")
+  .style("font-weight", "bold")
+  .text("Years Elapsed Since Publication");
+
+  svg.append("g")
+      .attr("class", "axis axis--y")
+      .call(d3.svg.axis()
+  .scale(y).tickFormat(function(d) {
+  return y.tickFormat(11,d3.format(",d"))(d);
+  })
+        .orient("left"))
+        //.ticks(10))
+    .append("text")
+      .attr("x", 4)
+      .attr("dy", ".32em")
+      .style("font-weight", "bold")
+      .text("Total Citations");
+
+				var groups = svg.append("g").attr("id", "lines")
+					.selectAll("g")
+					.data(kind)
+					.enter()
+					.append("g")
+					.attr("class", "cites")
+  .attr("id", function(d) {
+//console.log(d.key);
+  if (d.key) {
+
+							return d.key.replace(/ |,|\./g, "_");
+						}
+  });
+ 
+
+				//Within each group, create a new line/path,
+				//binding just the emissions data to each one
+				groups
+					.append("path")
+					.classed("line", true)
+					
+					.attr("d", function(d) {
+  d.line = this; // this isn't working for use below because it's the wrong dataset
+//console.log(d);
+
+  d.line=this;
+
+						return line(d.values);
+					})
+					.attr("id", function(d) {
+						if (d.key) {
+							return d.key.replace(/ |,|\./g, "_");
+						}
+  });
+
+
+  var voronoi = d3.geom.voronoi()
+					.x(function(d){
+						return x(d.elapsed);
+					})
+  .y(function(d) {
+ 
+ 
+  return y(d.cite);
+  
+					})
+  .clipExtent([[0, 0], [width, height]]);
+
+
+
+				var voronoiGroup = svg.append("g")
+					.attr("class", "voronoi");
+
+ 
+  voronoiGroup.selectAll("path")
+					.data(voronoi(vor))
+					.enter()
+					.append("path")
+  .attr("d", function(d) {
+  
+						return "M" + d.join("L") + "Z"; }) // this is just what you copy for a voronoi
+					.datum(function(d) { return d.point; }) // again, copy as is
+					.on("mouseover", mouseoverFunc) // mouseover goes on the voronoi cell!
+					
+  .on("mouseout", mouseoutFunc);
+
+
+  
+    d3.select("#show-voronoi")
+      .property("disabled", false)
+      .on("change", function() { voronoiGroup.classed("voronoi--show", this.checked); });
+
+        var focus = svg.append("g")
+		      .attr("transform", "translate(-100,-100)") // it's off screen
+		      .attr("class", "focus");
+
+				  focus.append("circle")
+				      .attr("r", 3.5);
+
+				  focus.append("text")
+				      .attr("y", -10);
+
+				<!-- //Axes -->
+				<!-- svg.append("g") -->
+				<!-- 	.attr("class", "x axis") -->
+				<!-- 	.attr("transform", "translate(0," + height  + ")") -->
+				<!-- 	.call(xAxis); -->
+
+				<!-- svg.append("g") -->
+				<!-- 	.attr("class", "y axis") -->
+				<!-- 	.call(yAxis); -->
+
+				function mouseoverFunc(d,i) {
+                                // console.log(i);
+                                // console.log(kind[i]);
+					// position the dot
+					focus.attr("transform", "translate(" + x(d.elapsed) + "," + y(d.cite) + ")");
+					 focus.select("text").text(d.name);
+				var countryId = d.name.replace(/ |,|\./g, "_");
+                                // console.log(countryId);
+
+					d3.select("path.line#" + countryId).classed("cite--hover", true);
+					d3.select("g.cites#" + countryId).moveToFront(); // the parent node is g#lines
+					}
+
+	function mouseoutFunc(d) {
+					// remove the dot offscreen and the tooltip
+					focus.attr("transform", "translate(-100,-100)");
+					d3.selectAll("path.line").classed("cite--hover", false);
+
+  }
+  });
+		d3.selection.prototype.moveToFront = function() {
+      return this.each(function(){
+        this.parentNode.appendChild(this);
+      });
+    }
+  
+  </script>
+  
+<p>Hello</p>
