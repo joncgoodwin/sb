@@ -50,6 +50,7 @@ write_sleeping_beauty <- function(x,y,graph=FALSE) { #x=filename,
                                         #etc.
 
     sb$id <- group_indices(sb,name) #who knows?
+    sb$id <- sub("^","flute",sb$id) #for javascript hash---seems to work
 
                                         # need to change 0s to 0.1 for d3.scale.log
     sb$cite[sb$cite==0] <- 0.1
