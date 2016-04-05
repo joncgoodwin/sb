@@ -9,12 +9,13 @@ write_sleeping_beauty <- function(x,y,graph=FALSE) { #x=filename,
 
                                         #read csv
     sb <- read.csv(x,stringsAsFactors=FALSE)
+    sb <- rename(sb,name=Title)
 
 
                                         #transform from wide to long
     sb <- sb  %>%
-        select(name=Title,Authors,Publication.Year,X1973:X2016) %>%
-            gather(name,cite,X1973:X2016) %>% #assumes this range, not
+        select(name,Authors,Publication.Year,X1973:X2016) %>%
+            gather(Year,cite,X1973:X2016) %>% #assumes this range, not
                                         #always the case
                 mutate(Year = as.numeric(gsub("X","", Year))) %>%
                     group_by(name) %>%
@@ -28,15 +29,15 @@ write_sleeping_beauty <- function(x,y,graph=FALSE) { #x=filename,
         sb <- sb %>% mutate (label_x_position=max(elapsed))
         sb <- sb %>% mutate(label_position=max(cite))
                                         #need to come up with non-manual method for this higlighting
-        rt <- sb %>% filter(grepl("STOKER|SENSATION|16TH-CENTURY SPAIN",Title))
+        rt <- sb %>% filter(grepl("STOKER|SENSATION|16TH-CENTURY SPAIN",name))
 
                                         #graph
-        gg <- plotgraph("Sleeping Beauties in Literary Studies") #maybe
-                                        #configure for title
 
 
 
-        gg
+
+
+
     }
 
                                         #write csv for d3.js display
@@ -56,7 +57,12 @@ write_sleeping_beauty <- function(x,y,graph=FALSE) { #x=filename,
     write.csv(sb, "data.csv", row.names=FALSE) #this data will not be
                                         #clean enough for d3
 
+    if(graph) {
+       sb
+    }
 
+
+}
 
     plotgraph <- function(x) {
         gg <- ggplot(data=sb, aes(x=elapsed,y=cite, Group=name))
@@ -72,5 +78,3 @@ write_sleeping_beauty <- function(x,y,graph=FALSE) { #x=filename,
 
         gg
     }
-
-}
