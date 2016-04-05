@@ -8,7 +8,7 @@
   }
 
   svg {font: 11px "Helevetica Neue", Helvetica, Arial, sans-serif;}
-
+#meta {font: 11px "Helevetica Neue", Helvetica, Arial, sans-serif;}
   .axis path
   .axis line {
   fill: none;
@@ -60,7 +60,7 @@
   <input type="checkbox" id="show-voronoi" disabled>
 </label>
 <script src="http://d3js.org/d3.v3.min.js"></script>
-
+<p id="meta"></p>
 <script>
   var margin = {top: 20, right: 30, bottom: 30, left: 40},
   width = 960 - margin.left - margin.right,
@@ -286,6 +286,7 @@
 
   d3.select("path.line#" + d.id).classed("cite--hover", true);
   d3.select("g.cites#" + d.id).moveToFront(); // the parent node is g#lines
+  d3.select("#meta").text(d.Authors+". " +"\u201C" + d.name + ".\u201D" + " " + d.PublicationYear+".");
   }
 
   function mouseoutFunc(d) {
@@ -297,7 +298,7 @@
   });
   d3.selection.prototype.moveToFront = function() {
   return this.each(function(){
-  this.parentNode.appendChild(this);
+  this.parentNode.appendChild(this); 
   });
   }
 
