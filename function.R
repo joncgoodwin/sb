@@ -14,7 +14,8 @@ write_sleeping_beauty <- function(x,y,graph=FALSE) { #x=filename,
                                         #transform from wide to long
     sb <- sb  %>%
         select(name=Title,Authors,Publication.Year,X1973:X2016) %>%
-            gather(name,cite,X1973:X2016) %>%
+            gather(name,cite,X1973:X2016) %>% #assumes this range, not
+                                        #always the case
                 mutate(Year = as.numeric(gsub("X","", Year))) %>%
                     group_by(name) %>%
                         mutate (cite = cumsum(cite))
@@ -44,7 +45,13 @@ write_sleeping_beauty <- function(x,y,graph=FALSE) { #x=filename,
 
                                         #need to create clean key column before writing or munge titles so
                                         #they will be clean as key values in javascript: remove all
-                                        #quotes, commas, parentheses, etc.
+                                        #quotes, commas, parentheses,
+                                        #etc.
+
+    sb$id <- group_indices(sb,name) #who knows?
+
+                                        # need to change 0s to 0.1 for d3.scale.log
+    sb$cite[sb$cite==0] <- 0.1
 
     write.csv(sb, "data.csv", row.names=FALSE) #this data will not be
                                         #clean enough for d3
