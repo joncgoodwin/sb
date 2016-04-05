@@ -1,6 +1,7 @@
 
-write_sleeping_beauty <- function(x,y,graph=FALSE) { #x=filename,
+write_sleeping_beauty <- function(x,y,z) { #x=filename,
                                         #y=citation threshold
+    #z = sleeping threshold
                                         #libraries
     library(dplyr)
     library(tidyr)
@@ -24,21 +25,6 @@ write_sleeping_beauty <- function(x,y,graph=FALSE) { #x=filename,
                                         #create elapsed column
     sb <- sb %>% mutate(elapsed=Year-Publication.Year) %>% filter (elapsed>0)
 
-    if(graph) {
-                                        #position labels
-        sb <- sb %>% mutate (label_x_position=max(elapsed))
-        sb <- sb %>% mutate(label_position=max(cite))
-                                        #need to come up with non-manual method for this higlighting
-        rt <- sb %>% filter(grepl("STOKER|SENSATION|16TH-CENTURY SPAIN",name))
-
-                                        #graph
-
-
-
-
-
-
-    }
 
                                         #write csv for d3.js display
     sb <- sb %>% filter(max(cite)>=y) # keep only those with cites greater than
@@ -54,18 +40,33 @@ write_sleeping_beauty <- function(x,y,graph=FALSE) { #x=filename,
 
                                         # need to change 0s to 0.1 for d3.scale.log
     sb$cite[sb$cite==0] <- 0.1
+   # sb <- subset(sb, cite <1 & elapsed > z) #this isn't working
 
     write.csv(sb, "data.csv", row.names=FALSE) #this data will not be
                                         #clean enough for d3
 
-    if(graph) {
-       sb
-    }
+
 
 
 }
 
-    plotgraph <- function(x) {
+plotgraph <- function(sb) {
+
+                                        #position labels
+        sb <- sb %>% mutate (label_x_position=max(elapsed))
+        sb <- sb %>% mutate(label_position=max(cite))
+                                        #need to come up with non-manual method for this higlighting
+        rt <- sb %>% filter(grepl("STOKER|SENSATION|16TH-CENTURY SPAIN",name))
+
+                                        #graph
+
+
+
+
+
+
+
+
         gg <- ggplot(data=sb, aes(x=elapsed,y=cite, Group=name))
         gg <- gg + theme_bw()
         gg <- gg + geom_line(colour="gray", alpha=.25)
