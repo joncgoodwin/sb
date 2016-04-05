@@ -41,7 +41,7 @@ write_sleeping_beauty <- function(x,y,graph=FALSE) { #x=filename,
     }
 
                                         #write csv for d3.js display
-    sb <- sb %>% filter(cite>=y) # keep only those with cites greater than
+    sb <- sb %>% filter(max(cite)>=y) # keep only those with cites greater than
                                         # threshold
 
                                         #need to create clean key column before writing or munge titles so
