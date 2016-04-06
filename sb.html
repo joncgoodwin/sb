@@ -145,7 +145,7 @@
 
 
   x.domain([0,45]);
-  y.domain([.1,1024]);
+  y.domain([.8,1024]);
   svg.append("g")
   .attr("class", "axis axis--x")
   .attr("transform", "translate(0," + height + ")")
@@ -278,7 +278,9 @@
   // position the dot
   focus.attr("transform", "translate(" + x(d.elapsed) + "," + y(d.cite) + ")");
   var actual= parseInt(d.PublicationYear) + parseInt(d.elapsed);
-  focus.select("text").text("Citations by " + actual + ":  " + d.cite);
+  var temp = d.cite;
+  if (temp===0.9) {temp=0;}
+  focus.select("text").text("Citations by " + actual + ":  " + temp);
   
   //var countryId = d.name.replace(/ |,|\./g, "_");
   // console.log(countryId);
