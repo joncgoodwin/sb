@@ -280,13 +280,15 @@
   // console.log(kind[i]);
   // position the dot
   focus.attr("transform", "translate(" + x(d.elapsed) + "," + y(d.cite) + ")");
-  focus.select("text").text(d.name);
+  var actual= parseInt(d.PublicationYear) + parseInt(d.elapsed);
+  focus.select("text").text("Citations by " + actual + ":  " + d.cite);
+  
   //var countryId = d.name.replace(/ |,|\./g, "_");
   // console.log(countryId);
 
   d3.select("path.line#" + d.id).classed("cite--hover", true);
   d3.select("g.cites#" + d.id).moveToFront(); // the parent node is g#lines
-  d3.select("#meta").text(d.Authors+". " +"\u201C" + d.name + ".\u201D" + " " + d.PublicationYear+".");
+  d3.select("#meta").text(d.Authors+". " +"\u201C" + d.name + ".\u201D" + " " + d.Journal + ": " + d.PublicationYear+".");
   }
 
   function mouseoutFunc(d) {
@@ -304,4 +306,4 @@
 
 </script>
 
-<p>Hello</p>
+
