@@ -25,7 +25,8 @@ write_sleeping_beauty <- function(x,y,z) { #x=filename,
                         mutate (cite = cumsum(cite))
 
                                         #create elapsed column
-    sb$PublicationYear <- as.numeric(sb$PublicationYear)
+    sb$PublicationYear <- as.numeric(sb$PublicationYear) #for text
+                                        #export from Web of Science
     sb <- sb %>% mutate(elapsed=Year-PublicationYear) %>% filter (elapsed>0)
 
 
