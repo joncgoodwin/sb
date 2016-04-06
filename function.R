@@ -43,7 +43,7 @@ write_sleeping_beauty <- function(x,y,z) { #x=filename,
     sb$Journal <- sub("PUBLICATIONS OF THE MODERN LANGUAGE ASSOCIATION OF AMERICA","",sb$Journal)
 
                                         # need to change 0s to 0.1 for d3.scale.log
-    sb$cite[sb$cite==0] <- 0.1
+    sb$cite[sb$cite==0] <- 0.9
    # sb <- subset(sb, cite <1 & elapsed > z) #this isn't working
 
     write.csv(sb, "data.csv", row.names=FALSE) #this data will not be
