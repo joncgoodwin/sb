@@ -273,8 +273,7 @@
   <!-- 	.call(yAxis); -->
 
   function mouseoverFunc(d,i) {
-  // console.log(i);
-  // console.log(kind[i]);
+  
   // position the dot
   focus.attr("transform", "translate(" + x(d.elapsed) + "," + y(d.cite) + ")");
   var actual= parseInt(d.PublicationYear) + parseInt(d.elapsed);
@@ -283,7 +282,7 @@
   focus.select("text").text("Citations by " + actual + ":  " + temp);
   
   //var countryId = d.name.replace(/ |,|\./g, "_");
-  // console.log(countryId);
+  
 
   d3.select("path.line#" + d.id).classed("cite--hover", true);
   d3.select("g.cites#" + d.id).moveToFront(); // the parent node is g#lines
