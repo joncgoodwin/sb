@@ -11,11 +11,13 @@ write_sleeping_beauty <- function(x,y,z) { #x=filename,
                                         #read csv
     sb <- read.csv(x,stringsAsFactors=FALSE)
     sb <- rename(sb,name=Title)
+    sb <- rename(sb,PublicationYear=Publication.Year)
+    sb <- rename(sb,Journal=Source.Title)
 
 
                                         #transform from wide to long
     sb <- sb  %>%
-        select(name,Authors,Publication.Year,X1973:X2016) %>%
+        select(name,Authors,PublicationYear,Journal,X1973:X2016) %>%
             gather(Year,cite,X1973:X2016) %>% #assumes this range, not
                                         #always the case
                 mutate(Year = as.numeric(gsub("X","", Year))) %>%
@@ -23,7 +25,7 @@ write_sleeping_beauty <- function(x,y,z) { #x=filename,
                         mutate (cite = cumsum(cite))
 
                                         #create elapsed column
-    sb <- sb %>% mutate(elapsed=Year-Publication.Year) %>% filter (elapsed>0)
+    sb <- sb %>% mutate(elapsed=Year-PublicationYear) %>% filter (elapsed>0)
 
 
                                         #write csv for d3.js display
