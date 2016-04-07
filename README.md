@@ -9,8 +9,7 @@ For more detail, see [this post](http://jgoodwin.net/blog/sleeping-beauties) and
 1. Automate read procedure so that it doesn't require manual spreadsheet tweaking.
  - If you use the text format, probably need to convert year to numeric. Maybe other problems. Still have to delete small header.
 2. Fix graphing function from R.
-3. Regularize capitalization of titles.
-4. Emphasize journal title.
-5. Clean and indent js code properly.
-6. Fix r function so that it accurately identifies "sleeping beauties" and "early wakers" according to user-defined criteria. Integrate into graphing code.
-7. Adjust domain so that it scales automatically using d3.extent or the like.
+3. Regularize capitalization of titles. 
+4. Clean and indent js code properly.
+5. Fix r function so that it accurately identifies "sleeping beauties" and "early wakers" according to user-defined criteria. Integrate into graphing code.
+

@@ -42,7 +42,7 @@ write_sleeping_beauty <- function(x,y,z) { #x=filename,
     sb$id <- group_indices(sb,name) #who knows?
     sb$id <- sub("^","flute",sb$id) #for javascript hash---seems to
                                         #work
-    sb$Journal <- sub("PUBLICATIONS OF THE MODERN LANGUAGE ASSOCIATION OF AMERICA","",sb$Journal)
+    sb$Journal <- sub("-PUBLICATIONS OF THE MODERN LANGUAGE ASSOCIATION OF AMERICA","",sb$Journal)
 
                                         # need to change 0s to 0.1 for d3.scale.log
     sb$cite[sb$cite==0] <- 0.9
