@@ -294,7 +294,7 @@ console.log(d3.max(data,function(d) { return d.cite; } ) );
 
   d3.select("path.line#" + d.id).classed("cite--hover", true);
   d3.select("g.cites#" + d.id).moveToFront(); // the parent node is g#lines
-  d3.select("#meta").text(d.Authors+". " +"\u201C" + d.name + ".\u201D" + " " + d.Journal + ": " + d.PublicationYear+".");
+  d3.select("#meta").html(d.Authors+". " +"\u201C" + d.name + ".\u201D" + " " + "<i>" + d.Journal + "</i>"+ ": " + d.PublicationYear+".");
   }
   var mt = d3.max(data,function(d) { return d.threshold;});
   var hi = [];
@@ -302,8 +302,8 @@ console.log(d3.max(data,function(d) { return d.cite; } ) );
   hi = hi + d.key + ", ";
   });
    
-  d3.select("#meta2").html("This graph shows articles with more than " + mt + " citations published in " + hi + " between 1973-2016. The citation data comes from Web of Science. The point of the graph is to highlight articles that grow relatively slowly, though this particular dataset may not have many. Mouse over each line to see its details. See ").append("a").attr("href", "http://jgoodwin.net/blog/sleeping-beauties/").text(" this post for details.");
-  
+  d3.select("#meta2").html("This graph shows articles with more than " + mt + " citations published in <i>" + hi + "</i> between 1973-2016. The citation data comes from Web of Science. The point of the graph is to highlight articles that grow relatively slowly, though this particular dataset may not have many. Mouse over each line to see its details. See ").append("a").attr("href", "http://jgoodwin.net/blog/sleeping-beauties/").text(" this post for details.");
+
   
   
   
