@@ -8,8 +8,9 @@
   }
 
   svg {font: 11px "Helevetica Neue", Helvetica, Arial, sans-serif;}
-#meta {font: 11px "Helevetica Neue", Helvetica, Arial, sans-serif;}
-#meta2 {font: 12px "Helevetica Neue", Helvetica, Arial, sans-serif;}
+  #meta {font: 11px "Helevetica Neue", Helvetica, Arial, sans-serif;}
+  #meta2 {font: 12px "Helevetica Neue", Helvetica, Arial, sans-serif;}
+  
   .axis path
   .axis line {
   fill: none;
@@ -99,6 +100,8 @@
   })
   .entries(data);
 
+  //For printing list of journal names in explanatory text
+  
   var jour = d3.nest()
   .key(function(d) {
   return d.Journal;
@@ -110,30 +113,6 @@
 
 
 
-  data.forEach(function(d,i) {
-
-
-  var myCites=[];
-
-
-
-
-
-  myCites.push({
-  named: d.name,
-  cited: d.cite,
-  elapsed: d.elapsed
-
-  });
-  //}
-  // });
-
-  dataset.push( {
-  named: d.name,
-  cited: myCites
-  });
-  //});
-  });
 
   var vor = d3.nest()
   .key(function(d) {
@@ -149,11 +128,11 @@
   return d.values;
   });
 
-console.log(d3.max(data,function(d) { return d.cite; } ) );
+
   x.domain([0,d3.max(data, function(d) { return d.elapsed; })]);
   y.domain([.8,d3.max(data, function(d) { return d.cite; })]);
   
-  //y.domain([.8,1024]);
+  
   svg.append("g")
   .attr("class", "axis axis--x")
   .attr("transform", "translate(0," + height + ")")
@@ -191,23 +170,18 @@ console.log(d3.max(data,function(d) { return d.cite; } ) );
 
   return d.key;
   }
-  //console.log(d.key);
-  //if (d.key) {
-
-  //							return d.key.replace(/ |,|\./g, "_");
-  //						}
+  
   });
 
 
-  //Within each group, create a new line/path,
-  //binding just the emissions data to each one
+  
   groups
   .append("path")
   .classed("line", true)
 
   .attr("d", function(d) {
-  d.line = this; // this isn't working for use below because it's the wrong dataset
-  //console.log(d);
+  d.line = this; 
+
 
   d.line=this;
 
@@ -215,12 +189,10 @@ console.log(d3.max(data,function(d) { return d.cite; } ) );
   })
   .attr("id", function(d) {
   if(d.key) {
-  //console.log("foo"+d.key);
+  
   return d.key;
   }
-  //						if (d.key) {
-  //							return d.key.replace(/ |,|\./g, "_");
-  //						}
+  
   });
 
 
@@ -248,9 +220,9 @@ console.log(d3.max(data,function(d) { return d.cite; } ) );
   .append("path")
   .attr("d", function(d) {
 
-  return "M" + d.join("L") + "Z"; }) // this is just what you copy for a voronoi
-  .datum(function(d) { return d.point; }) // again, copy as is
-  .on("mouseover", mouseoverFunc) // mouseover goes on the voronoi cell!
+  return "M" + d.join("L") + "Z"; }) 
+  .datum(function(d) { return d.point; }) 
+  .on("mouseover", mouseoverFunc) 
 
   .on("mouseout", mouseoutFunc);
 
@@ -261,7 +233,7 @@ console.log(d3.max(data,function(d) { return d.cite; } ) );
   .on("change", function() { voronoiGroup.classed("voronoi--show", this.checked); });
 
   var focus = svg.append("g")
-  .attr("transform", "translate(-100,-100)") // it's off screen
+  .attr("transform", "translate(-100,-100)") 
   .attr("class", "focus");
 
   focus.append("circle")
@@ -270,30 +242,21 @@ console.log(d3.max(data,function(d) { return d.cite; } ) );
   focus.append("text")
   .attr("y", -10);
 
-  <!-- //Axes -->
-  <!-- svg.append("g") -->
-  <!-- 	.attr("class", "x axis") -->
-  <!-- 	.attr("transform", "translate(0," + height  + ")") -->
-  <!-- 	.call(xAxis); -->
-
-  <!-- svg.append("g") -->
-  <!-- 	.attr("class", "y axis") -->
-  <!-- 	.call(yAxis); -->
-
+  
   function mouseoverFunc(d,i) {
   
-  // position the dot
+  
   focus.attr("transform", "translate(" + x(d.elapsed) + "," + y(d.cite) + ")");
   var actual= parseInt(d.PublicationYear) + parseInt(d.elapsed);
   var temp = d.cite;
   if (temp===0.9) {temp=0;}
   focus.select("text").text("Citations by " + actual + ":  " + temp);
   
-  //var countryId = d.name.replace(/ |,|\./g, "_");
+  
   
 
   d3.select("path.line#" + d.id).classed("cite--hover", true);
-  d3.select("g.cites#" + d.id).moveToFront(); // the parent node is g#lines
+  d3.select("g.cites#" + d.id).moveToFront(); 
   d3.select("#meta").html(d.Authors+". " +"\u201C" + d.name + ".\u201D" + " " + "<i>" + d.Journal + "</i>"+ ": " + d.PublicationYear+".");
   }
   var mt = d3.max(data,function(d) { return d.threshold;});
@@ -309,7 +272,7 @@ console.log(d3.max(data,function(d) { return d.cite; } ) );
   
   
   function mouseoutFunc(d) {
-  // remove the dot offscreen and the tooltip
+  
   focus.attr("transform", "translate(-100,-100)");
   d3.selectAll("path.line").classed("cite--hover", false);
 
