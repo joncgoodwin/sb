@@ -16,7 +16,7 @@ will return a dataframe that can be passed to **plotgraph**. It will also save a
 
 To make a plot from R, use:
 ```R
-plotgraph(sb,1,10)
+gg <- plotgraph(sb,1,10)
 ```
 This will return a ggplot object that highlights articles that went ten years with no citations. Adjust parameters to suit.
 
