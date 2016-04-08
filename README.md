@@ -20,6 +20,9 @@ gg <- plotgraph(sb,1,10)
 ```
 This will return a ggplot object that highlights articles that went ten years with no citations. Adjust parameters to suit.
 
+See [http://jgoodwin.net/sb](here), [http://jgoodwin.net/sb/hist.html](here),
+[http://jgoodwin.net/sb/folk.html](here), [http://jgoodwin.net/sb/signs.html](here), and [http://jgoodwin.net/sb/rhet.html](here) for examples.
+
 
 # Acknowledgments
 

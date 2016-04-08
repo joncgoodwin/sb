@@ -47,7 +47,7 @@ write_sleeping_beauty <- function(x,y) { #x=filename,
                                         # need to change 0s to 0.9 for d3.scale.log
     sb$cite[sb$cite==0] <- 0.9
     sb$threshold <- y #hackish way of showing threshold in d3 graph
-   # sb <- subset(sb, cite <1 & elapsed > z) #this isn't working
+
 
     write.csv(sb, "data.csv", row.names=FALSE)
 
