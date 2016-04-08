@@ -8,9 +8,17 @@ For more detail, see [this post](http://jgoodwin.net/blog/sleeping-beauties) and
 
 Create a citation report from journals of interest in web of science. Save the top 500 results or so as a text file. Open the text file (usually named "savedrecs.txt") and delete the header. Save it as "journal.csv" or similar in the sb directory.
 
-From R, evaluate the **write_sleeping_beauty** and **plotgraph** functions. sb <- write_sleeping_beauty("citations.csv", 20) will return a dataframe that can be passed to **plotgraph**. It will also save a file named "data.csv" Open the sb.html file in your browser to see the d3.js visualization.
+From R, evaluate the **write_sleeping_beauty** and **plotgraph** functions.
+```R
+sb <- write_sleeping_beauty("citations.csv", 20)
+```
+will return a dataframe that can be passed to **plotgraph**. It will also save a file named "data.csv" Open the sb.html file in your browser to see the d3.js visualization.
 
-To make a plot from R, use plotgraph(sb,1,10). This will return a ggplot object that highlights articles that went ten years with no citations. Adjust parameters to suit.
+To make a plot from R, use:
+```R
+plotgraph(sb,1,10)
+```
+This will return a ggplot object that highlights articles that went ten years with no citations. Adjust parameters to suit.
 
 
 # Acknowledgments
