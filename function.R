@@ -1,7 +1,7 @@
 
-write_sleeping_beauty <- function(x,y,z) { #x=filename,
+write_sleeping_beauty <- function(x,y) { #x=filename,
                                         #y=citation threshold
-    #z = sleeping threshold
+
                                         #libraries
     library(dplyr)
     library(tidyr)
