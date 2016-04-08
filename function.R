@@ -49,41 +49,35 @@ write_sleeping_beauty <- function(x,y,z) { #x=filename,
     sb$threshold <- y #hackish way of showing threshold in d3 graph
    # sb <- subset(sb, cite <1 & elapsed > z) #this isn't working
 
-    write.csv(sb, "data.csv", row.names=FALSE) #this data will not be
+    #write.csv(sb, "data.csv", row.names=FALSE) #this data will not be
                                         #clean enough for d3
 
-
+sb
 
 
 }
 
-plotgraph <- function(sb) {
+plotgraph <- function(sb,x,y) { #sb is dataframe from above; x is
+                             #citation theshold, y years
 
                                         #position labels
         sb <- sb %>% mutate (label_x_position=max(elapsed))
         sb <- sb %>% mutate(label_position=max(cite))
-                                        #need to come up with non-manual method for this higlighting
-        rt <- sb %>% filter(grepl("STOKER|SENSATION|16TH-CENTURY SPAIN",name))
 
-                                        #graph
+        at <- subset(sb,cite<x & elapsed>y) #for labels
 
-
-
-
-
-
-
+        rt <- sb %>% filter(name %in% at$name) # for highlight
 
         gg <- ggplot(data=sb, aes(x=elapsed,y=cite, Group=name))
         gg <- gg + theme_bw()
         gg <- gg + geom_line(colour="gray", alpha=.25)
-        gg <- gg + geom_line(data=rt, aes(x=elapsed, y=cite, Group=name), alpha=1, colour="red")
+        gg <- gg + geom_line(data=rt, aes(x=elapsed, y=cite,
+                                        Group=name), alpha=1, colour="red")
         gg <- gg + scale_y_continuous(trans=log2_trans())
         gg <-  gg + xlab("Years Elapsed Since Publication")
         gg <-  gg + ylab("Cumulative Citations")
-        gg <-  gg + ggtitle(x)
-                                        #gg <- gg + scale_y_continuous(breaks=c(0,1,2,3,4,5,10,25,50,100,200,400))
-        gg <- gg + geom_text(data=subset(sb, cite <1 & elapsed > 10), aes(x=label_x_position, y=label_position, Group=name, label=name), colour="red", size=2)
+        gg <-  gg + ggtitle("Sleeping Beauties")
+        gg <- gg + geom_text(data=at, aes(x=label_x_position, y=label_position, Group=name, label=name), colour="red", size=2)
 
         gg
     }
