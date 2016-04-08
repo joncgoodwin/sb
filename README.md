@@ -28,7 +28,7 @@ See [here](http://jgoodwin.net/sb), [here](http://jgoodwin.net/sb/hist.html),
 
 The d3.js visualization is based on this [example](http://bl.ocks.org/mbostock/8033015) by Mike Bostock. Lynn Cherny's [code](http://arnicas.github.io/interactive-vis-course/Week7/multiple_lines_voronoi.html) was also used. This [stackoverflow question and answer](http://stackoverflow.com/questions/31507611/d3-multi-line-voronoi-trouble-with-showing-data-on-mouseover) was also helpful.
 
-I also got valuable feedback from a conversation with PJ Trainor and Rachel Buurma. 
+I also got valuable feedback from a conversation with PJ Trainor, Nabil Kashyap, and Rachel Buurma. 
 
 # TODO
 
