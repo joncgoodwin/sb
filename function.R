@@ -42,15 +42,15 @@ write_sleeping_beauty <- function(x,y) { #x=filename,
     sb$id <- group_indices(sb,name) #who knows?
     sb$id <- sub("^","flute",sb$id) #for javascript hash---seems to
                                         #work
-    sb$Journal <- sub("-PUBLICATIONS OF THE MODERN LANGUAGE ASSOCIATION OF AMERICA","",sb$Journal)
+    sb$Journal <- sub("-PUBLICATIONS OF THE MODERN LANGUAGE ASSOCIATION OF AMERICA","",sb$Journal) # journal specific tweak
 
-                                        # need to change 0s to 0.1 for d3.scale.log
+                                        # need to change 0s to 0.9 for d3.scale.log
     sb$cite[sb$cite==0] <- 0.9
     sb$threshold <- y #hackish way of showing threshold in d3 graph
    # sb <- subset(sb, cite <1 & elapsed > z) #this isn't working
 
-    #write.csv(sb, "data.csv", row.names=FALSE) #this data will not be
-                                        #clean enough for d3
+    write.csv(sb, "data.csv", row.names=FALSE)
+
 
 sb
 
