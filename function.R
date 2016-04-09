@@ -39,8 +39,9 @@ write_sleeping_beauty <- function(x,y) { #x=filename,
                                         #quotes, commas, parentheses,
                                         #etc.
 
-    sb$id <- group_indices(sb,name) #this generates a warning, but I
-                                   #don't know why and I don't care
+    sb$id <- group_indices(sb) #Fixed per Andrew Goldstone's helpful
+                                        #explanation.
+
     sb$id <- sub("^","flute",sb$id) #for javascript hash---seems to
                                         #work
     sb$Journal <- sub("-PUBLICATIONS OF THE MODERN LANGUAGE ASSOCIATION OF AMERICA","",sb$Journal) # journal specific tweak
