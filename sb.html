@@ -1,291 +1,290 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
-  body {
-  width: 1080px;
-  margin: auto;
-  position: relative;
-  }
+ body {
+     width: 1080px;
+     margin: auto;
+     position: relative;
+ }
 
-  svg {font: 11px "Helevetica Neue", Helvetica, Arial, sans-serif;}
-  #meta {font: 11px "Helevetica Neue", Helvetica, Arial, sans-serif;}
-  #meta2 {font: 12px "Helevetica Neue", Helvetica, Arial, sans-serif;}
-  
-  .axis path
-  .axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: CrispEdges;
+ svg {font: 11px "Helevetica Neue", Helvetica, Arial, sans-serif;}
+ #meta {font: 11px "Helevetica Neue", Helvetica, Arial, sans-serif;}
+ #meta2 {font: 12px "Helevetica Neue", Helvetica, Arial, sans-serif;}
 
-  }
-  path.line {
-  fill: none;
-  }
-  .cites {
-  fill: none;
-  stroke: #aaa;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-  stroke-width: .5px;
-  }
+ .axis path
+ .axis line {
+     fill: none;
+     stroke: #000;
+     shape-rendering: CrispEdges;
 
-  .cite--hover{
-  stroke: #F00;
-  stroke-width: 1px;
-  }
+ }
+ path.line {
+     fill: none;
+ }
+ .cites {
+     fill: none;
+     stroke: #aaa;
+     stroke-linejoin: round;
+     stroke-linecap: round;
+     stroke-width: .5px;
+ }
 
-  .focus text {
-  text-anchor: middle;
-  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
-  }
+ .cite--hover{
+     stroke: #F00;
+     stroke-width: 1px;
+ }
 
-  .voronoi path {
-  fill: none;
-  pointer-events: all;
-  }
+ .focus text {
+     text-anchor: middle;
+     text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+ }
 
-  .voronoi--show path {
-  stroke: red;
-  stroke-opacity: .2;
-  }
+ .voronoi path {
+     fill: none;
+     pointer-events: all;
+ }
 
-  #form {
-  position: absolute;
-  top: 20px;
-  right: 30px;
-  }
+ .voronoi--show path {
+     stroke: red;
+     stroke-opacity: .2;
+ }
+
+ #form {
+     position: absolute;
+     top: 20px;
+     right: 30px;
+ }
 
 </style>
 
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <p id="meta"></p>
 <script>
-  var margin = {top: 20, right: 30, bottom: 30, left: 40},
-  width = 960 - margin.left - margin.right,
-  height = 600 - margin.top - margin.bottom;
+ var margin = {top: 20, right: 30, bottom: 30, left: 40},
+     width = 960 - margin.left - margin.right,
+     height = 600 - margin.top - margin.bottom;
 
-  var x=d3.scale.linear()
-  .range([0,width]);
+ var x=d3.scale.linear()
+         .range([0,width]);
 
-  var y=d3.scale.log()
-  .base(2)
-  .range([height,0]);
+ var y=d3.scale.log()
+         .base(2)
+         .range([height,0]);
 
-  var voronoi = d3.geom.voronoi()
-  .x(function(d) { return x(d.elapsed); })
-  .y(function(d) { return y(d.cite); })
-  .clipExtent([[-margin.left, -margin.top], [width + margin.right, height + margin.bottom]]);
+ var voronoi = d3.geom.voronoi()
+                 .x(function(d) { return x(d.elapsed); })
+                 .y(function(d) { return y(d.cite); })
+                 .clipExtent([[-margin.left, -margin.top], [width + margin.right, height + margin.bottom]]);
 
-  var line = d3.svg.line()
-  .x(function(d) { return x(d.elapsed); })
-  .y(function(d) { return y(d.cite); });
-
-
-  var svg = d3.select("body").append("svg")
-  .attr("width", width + margin.left + margin.right)
-  .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-  d3.csv("data.csv", function(error, data) {
-  data.forEach(function(d) {
-  d.elapsed = +d.elapsed;
-  d.cite = +d.cite;
-  });
-
-  var kind = d3.nest()
-  .key(function(d) {
-  return d.id;
-
-  })
-  .entries(data);
-
-  //For printing list of journal names in explanatory text
-  
-  var jour = d3.nest()
-  .key(function(d) {
-  return d.Journal;
-  })
-  .entries(data);
-
-  
-  var dataset=[];
+ var line = d3.svg.line()
+              .x(function(d) { return x(d.elapsed); })
+              .y(function(d) { return y(d.cite); });
 
 
+ var svg = d3.select("body").append("svg")
+             .attr("width", width + margin.left + margin.right)
+             .attr("height", height + margin.top + margin.bottom)
+             .append("g")
+             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+ d3.csv("data.csv", function(error, data) {
+     data.forEach(function(d) {
+         d.elapsed = +d.elapsed;
+         d.cite = +d.cite;
+     });
+
+     var kind = d3.nest()
+                  .key(function(d) {
+                      return d.id;
+
+                  })
+                  .entries(data);
+
+     //For printing list of journal names in explanatory text
+
+     var jour = d3.nest()
+                  .key(function(d) {
+                      return d.Journal;
+                  })
+                  .entries(data);
 
 
-  var vor = d3.nest()
-  .key(function(d) {
-  return x(d.elapsed) + "," + y(d.cite);
-  })
-  .rollup(function(v) {
-  return v[0];
-  })
-  .entries(d3.merge(kind.map(function(d) {
-  return d.values;
-  })))
-  .map(function(d) {
-  return d.values;
-  });
+     var dataset=[];
 
 
-  x.domain([0,d3.max(data, function(d) { return d.elapsed; })]);
-  y.domain([0.8,d3.max(data, function(d) { return d.cite; })]);
-  
-  
-  svg.append("g")
-  .attr("class", "axis axis--x")
-  .attr("transform", "translate(0," + height + ")")
-  .call(d3.svg.axis()
-  .scale(x)
-  .orient("bottom"))
-  .append("text")
-  .attr("x", 600)
-  .attr("dy", "2.5em")
-  .style("font-weight", "bold")
-  .text("Years Elapsed Since Publication");
-
-  svg.append("g")
-  .attr("class", "axis axis--y")
-  .call(d3.svg.axis()
-  .scale(y).tickFormat(function(d) {
-  return y.tickFormat(11,d3.format(",d"))(d);
-  })
-  .orient("left"))
-  //.ticks(10))
-  .append("text")
-  .attr("x", 4)
-  .attr("dy", ".32em")
-  .style("font-weight", "bold")
-  .text("Total Citations");
-
-  var groups = svg.append("g").attr("id", "lines")
-  .selectAll("g")
-  .data(kind)
-  .enter()
-  .append("g")
-  .attr("class", "cites")
-  .attr("id", function(d) {
-  if (d.key) {
-
-  return d.key;
-  }
-  
-  });
 
 
-  
-  groups
+     var vor = d3.nest()
+                 .key(function(d) {
+                     return x(d.elapsed) + "," + y(d.cite);
+                 })
+                 .rollup(function(v) {
+                     return v[0];
+                 })
+                 .entries(d3.merge(kind.map(function(d) {
+                     return d.values;
+                 })))
+                 .map(function(d) {
+                     return d.values;
+                 });
+
+
+     x.domain([0,d3.max(data, function(d) { return d.elapsed; })]);
+     y.domain([0.8,d3.max(data, function(d) { return d.cite; })]);
+
+
+     svg.append("g")
+        .attr("class", "axis axis--x")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.svg.axis()
+                .scale(x)
+                .orient("bottom"))
+        .append("text")
+        .attr("x", 600)
+        .attr("dy", "2.5em")
+        .style("font-weight", "bold")
+        .text("Years Elapsed Since Publication");
+
+     svg.append("g")
+        .attr("class", "axis axis--y")
+        .call(d3.svg.axis()
+                .scale(y).tickFormat(function(d) {
+                    return y.tickFormat(11,d3.format(",d"))(d);
+                })
+                .orient("left"))
+         //.ticks(10))
+        .append("text")
+        .attr("x", 4)
+        .attr("dy", ".32em")
+        .style("font-weight", "bold")
+        .text("Total Citations");
+
+     var groups = svg.append("g").attr("id", "lines")
+                     .selectAll("g")
+                     .data(kind)
+                     .enter()
+                     .append("g")
+                     .attr("class", "cites")
+                     .attr("id", function(d) {
+                         if (d.key) {
+
+                             return d.key;
+                         }
+
+                     });
+
+
+
+     groups
   .append("path")
   .classed("line", true)
 
   .attr("d", function(d) {
-  d.line = this; 
+      d.line = this;
 
 
-  d.line=this;
+      d.line=this;
 
-  return line(d.values);
+      return line(d.values);
   })
   .attr("id", function(d) {
-  if(d.key) {
-  
-  return d.key;
-  }
-  
+      if(d.key) {
+
+          return d.key;
+      }
+
   });
 
 
-  var voronoi = d3.geom.voronoi()
-  .x(function(d){
-  return x(d.elapsed);
-  })
-  .y(function(d) {
+     var voronoi = d3.geom.voronoi()
+                     .x(function(d){
+                         return x(d.elapsed);
+                     })
+                     .y(function(d) {
 
 
-  return y(d.cite);
+                         return y(d.cite);
 
-  })
-  .clipExtent([[0, 0], [width, height]]);
-
-
-
-  var voronoiGroup = svg.append("g")
-  .attr("class", "voronoi");
-
-
-  voronoiGroup.selectAll("path")
-  .data(voronoi(vor))
-  .enter()
-  .append("path")
-  .attr("d", function(d) {
-
-  return "M" + d.join("L") + "Z"; }) 
-  .datum(function(d) { return d.point; }) 
-  .on("mouseover", mouseoverFunc) 
-
-  .on("mouseout", mouseoutFunc);
+                     })
+                     .clipExtent([[0, 0], [width, height]]);
 
 
 
-  d3.select("#show-voronoi")
-  .property("disabled", false)
-  .on("change", function() { voronoiGroup.classed("voronoi--show", this.checked); });
+     var voronoiGroup = svg.append("g")
+                           .attr("class", "voronoi");
 
-  var focus = svg.append("g")
-  .attr("transform", "translate(-100,-100)") 
-  .attr("class", "focus");
 
-  focus.append("circle")
-  .attr("r", 3.5);
+     voronoiGroup.selectAll("path")
+                 .data(voronoi(vor))
+                 .enter()
+                 .append("path")
+                 .attr("d", function(d) {
 
-  focus.append("text")
-  .attr("y", -10);
+                     return "M" + d.join("L") + "Z"; })
+                 .datum(function(d) { return d.point; })
+                 .on("mouseover", mouseoverFunc)
 
-  
-  function mouseoverFunc(d,i) {
-  
-  
-  focus.attr("transform", "translate(" + x(d.elapsed) + "," + y(d.cite) + ")");
-  var actual= parseInt(d.PublicationYear) + parseInt(d.elapsed);
-  var temp = d.cite;
-  if (temp===0.9) {temp=0;}
-  focus.select("text").text("Citations by " + actual + ":  " + temp);
-  
-  
-  
+                 .on("mouseout", mouseoutFunc);
 
-  d3.select("path.line#" + d.id).classed("cite--hover", true);
-  d3.select("g.cites#" + d.id).moveToFront(); 
-  d3.select("#meta").html(d.Authors+". " +"\u201C" + d.name + ".\u201D" + " " + "<i>" + d.Journal + "</i>"+ ": " + d.PublicationYear+".");
-  }
-  var mt = d3.max(data,function(d) { return d.threshold;});
-  var hi = [];
-  jour.forEach(function(d) {
-  hi = hi + d.key + ", ";
-  });
-  hi = hi.replace(/\, $/,"");
-  hi = hi.replace(/(^.*)\,(.*?$)/,"$1, </i>and<i> $2");
-  d3.select("#meta2").html("This graph shows articles with more than " + mt + " citations published in <i>" + hi + "</i> between 1973-2016. The citation data comes from Web of Science. The point of the graph is to highlight articles that grow relatively slowly, though this particular dataset may not have many. Mouse over each line to see its details. See ").append("a").attr("href", "http://jgoodwin.net/blog/sleeping-beauties/").text(" this post for details.");
 
-  
-  
-  
-  function mouseoutFunc(d) {
-  
-  focus.attr("transform", "translate(-100,-100)");
-  d3.selectAll("path.line").classed("cite--hover", false);
 
-  }
-  
-  }); // closes d3.csv
+     d3.select("#show-voronoi")
+       .property("disabled", false)
+       .on("change", function() { voronoiGroup.classed("voronoi--show", this.checked); });
 
-  d3.selection.prototype.moveToFront = function() {
-  return this.each(function(){
-  this.parentNode.appendChild(this);
-  });
-  }
+     var focus = svg.append("g")
+                    .attr("transform", "translate(-100,-100)")
+                    .attr("class", "focus");
+
+     focus.append("circle")
+          .attr("r", 3.5);
+
+     focus.append("text")
+          .attr("y", -10);
+
+
+     function mouseoverFunc(d,i) {
+
+
+         focus.attr("transform", "translate(" + x(d.elapsed) + "," + y(d.cite) + ")");
+         var actual= parseInt(d.PublicationYear) + parseInt(d.elapsed);
+         var temp = d.cite;
+         if (temp===0.9) {temp=0;}
+         focus.select("text").text("Citations by " + actual + ":  " + temp);
+
+
+
+
+         d3.select("path.line#" + d.id).classed("cite--hover", true);
+         d3.select("g.cites#" + d.id).moveToFront();
+         d3.select("#meta").html(d.Authors+". " +"\u201C" + d.name + ".\u201D" + " " + "<i>" + d.Journal + "</i>"+ ": " + d.PublicationYear+".");
+     }
+     var mt = d3.max(data,function(d) { return d.threshold;});
+     var hi = [];
+     jour.forEach(function(d) {
+         hi = hi + d.key + ", ";
+     });
+     hi = hi.replace(/\, $/,"");
+     hi = hi.replace(/(^.*)\,(.*?$)/,"$1, </i>and<i> $2");
+     d3.select("#meta2").html("This graph shows articles with more than " + mt + " citations published in <i>" + hi + "</i> between 1973-2016. The citation data comes from Web of Science. The point of the graph is to highlight articles that grow relatively slowly, though this particular dataset may not have many. Mouse over each line to see its details. See ").append("a").attr("href", "http://jgoodwin.net/blog/sleeping-beauties/").text(" this post for details.");
+
+
+
+
+     function mouseoutFunc(d) {
+
+         focus.attr("transform", "translate(-100,-100)");
+         d3.selectAll("path.line").classed("cite--hover", false);
+
+     }
+
+ }); // closes d3.csv
+
+ d3.selection.prototype.moveToFront = function() {
+     return this.each(function(){
+         this.parentNode.appendChild(this);
+     });
+ }
 
 </script>
 <p id="meta2"></p>
-
