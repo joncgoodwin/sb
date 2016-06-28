@@ -7,6 +7,7 @@ write_sleeping_beauty <- function(x,y) { #x=filename,
     library(tidyr)
     library(ggplot2)
     library(scales) #for log axis in plotgraph
+    library(stringr)
 
                                         #read csv
     sb <- read.csv(x,stringsAsFactors=FALSE)
@@ -27,6 +28,8 @@ write_sleeping_beauty <- function(x,y) { #x=filename,
                                         #create elapsed column
     sb$PublicationYear <- as.numeric(sb$PublicationYear) #for text
                                         #export from Web of Science
+    sb$name <- str_to_title(sb$name)
+    sb$Journal <- str_to_title(sb$Journal)
     sb <- sb %>% mutate(elapsed=Year-PublicationYear) %>% filter (elapsed>0)
 
 
