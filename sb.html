@@ -251,10 +251,6 @@
          var temp = d.cite;
          if (temp===0.9) {temp=0;}
          focus.select("text").text("Citations by " + actual + ":  " + temp);
-
-
-
-
          d3.select("path.line#" + d.id).classed("cite--hover", true);
          d3.select("g.cites#" + d.id).moveToFront();
          d3.select("#meta").html(d.Authors+". " +"\u201C" + d.name + ".\u201D" + " " + "<i>" + d.Journal + "</i>"+ ": " + d.PublicationYear+".");
